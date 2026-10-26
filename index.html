@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>남길 수 있는 것들 | 입장</title>
+  <meta name="description" content="남길 수 있는 것들 — 1인칭 3D 인터랙티브 게임">
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#101312;color:#e8e6df}
+    body{min-height:100vh;min-height:100dvh}
+    .entry{position:fixed;inset:0;display:grid;place-items:center;padding:24px;overflow:hidden;
+      background:radial-gradient(ellipse 60% 55% at 50% 40%,#323c36 0%,#1d2521 60%,#0b0f0d 100%)}
+    .entry:before{content:"";position:absolute;inset:-20%;opacity:.17;pointer-events:none;background:repeating-linear-gradient(94deg,transparent 0 40px,#879489 41px 42px,transparent 44px 96px);transform:rotate(13deg)}
+    .panel{position:relative;width:min(100%,430px);background:rgba(12,16,14,.78);border:1px solid #4c5a50;padding:42px 37px 36px;box-shadow:0 26px 100px #02040380;backdrop-filter:blur(10px)}
+    .eyebrow{font-size:11px;font-weight:700;letter-spacing:.32em;color:#a8b4a7;margin:0 0 26px}
+    h1{font-size:clamp(31px,6vw,44px);font-weight:650;letter-spacing:-.07em;margin:0 0 14px;line-height:1.2}
+    .sub{color:#9fa99f;font-size:13px;line-height:1.8;margin:0 0 34px}
+    label{display:block;font-size:12px;letter-spacing:.08em;margin-bottom:12px;color:#d5ddd3}
+    input{width:100%;font:inherit;background:#111815;color:#fff;border:1px solid #68786c;padding:15px 16px;border-radius:0;outline-offset:3px}
+    input:focus{border-color:#d6e1d3;outline:2px solid #94a99a}
+    button{width:100%;margin-top:14px;border:1px solid #c3d0c0;background:#c3d0c0;color:#152019;padding:16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.05em}
+    button:hover{background:#e0e9dd}
+    .error{min-height:20px;color:#ffb7a6;font-size:12px;margin:12px 0 0;line-height:1.5}
+    .footer{color:#77897b;font-size:10px;letter-spacing:.12em;margin:35px 0 0}
+    #gameWrap{display:none;position:fixed;inset:0;background:#000}
+    #gameFrame{display:block;width:100%;height:100%;border:none}
+    .exit{position:fixed;top:14px;right:14px;z-index:5;width:auto;margin:0;background:#17221de6;color:#fff;border:1px solid #6b7d6e;padding:9px 13px;font-size:12px}
+    @media (max-width:470px){.panel{padding:32px 24px}h1{font-size:32px}}
+  </style>
+</head>
+<body>
+  <section class="entry" id="entry">
+    <form class="panel" id="entryForm" autocomplete="off">
+      <p class="eyebrow">INTERACTIVE EXPERIENCE · PROTOTYPE 04</p>
+      <h1>남길 수 있는 것들</h1>
+      <p class="sub">누군가의 방을 정리하러 왔습니다.<br>안으로 들어가기 전에 출입 코드를 입력하세요.</p>
+      <label for="code">ENTRY CODE / 출입 코드</label>
+      <input id="code" type="password" placeholder="출입 코드 입력" autocomplete="off" required aria-describedby="error">
+      <button type="submit">문 열기 &nbsp; →</button>
+      <p class="error" role="alert" id="error"></p>
+      <p class="footer">THE LAST CLEANUP · PRIVATE PREVIEW</p>
+    </form>
+  </section>
+  <div id="gameWrap">
+    <button type="button" class="exit" id="exitButton">나가기 ×</button>
+    <iframe id="gameFrame" title="남길 수 있는 것들 — 게임 화면" allow="fullscreen; autoplay; pointer-lock" allowfullscreen></iframe>
+  </div>
+  <script>
+    // IMPORTANT: This is a presentation-only gate, NOT secure authentication.
+    // Anyone with access to the static HTML source can read this code and the game URL.
+    // Change this demo entry code if you want a different presentation code.
+    const DEMO_ENTRY_CODE = "ROOM1026";
+    const GAME_FILE = "남길_수_있는_것들_시네마틱_1인칭3D_v04.html";
+    const form = document.getElementById('entryForm');
+    const field = document.getElementById('code');
+    const error = document.getElementById('error');
+    const entry = document.getElementById('entry');
+    const gameWrap = document.getElementById('gameWrap');
+    const frame = document.getElementById('gameFrame');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (field.value !== DEMO_ENTRY_CODE) {
+        error.textContent = '출입 코드가 일치하지 않습니다.';
+        field.value = '';
+        field.focus();
+        return;
+      }
+      error.textContent = '';
+      entry.style.display = 'none';
+      gameWrap.style.display = 'block';
+      frame.src = GAME_FILE;
+    });
+    document.getElementById('exitButton').addEventListener('click', () => {
+      frame.removeAttribute('src');
+      gameWrap.style.display = 'none';
+      entry.style.display = 'grid';
+      field.value = '';
+      field.focus();
+    });
+  </script>
+</body>
+</html>
